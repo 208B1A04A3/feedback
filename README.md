@@ -48,31 +48,51 @@ def get_sentiment(review):
         
         return 'Neutral'
 
-This function takes a review as input and returns the sentiment label ('Positive', 'Negative', or 'Neutral') based on the sentiment score of the review.
+*This function takes a review as input and returns the sentiment label ('Positive', 'Negative', or 'Neutral') based on the sentiment score of the review.
 
-It creates an instance of SentimentIntensityAnalyzer called sid.
 
-The polarity_scores() method of sid is called on the review to obtain sentiment scores, including positive, negative, neutral, and compound scores.
+*It creates an instance of SentimentIntensityAnalyzer called sid.
 
-The compound score represents the overall sentiment of the review. If it is greater than or equal to 0.05, the review is considered positive and is appended to the pos list. If it is less than 
+
+*The polarity_scores() method of sid is called on the review to obtain sentiment scores, including positive, negative, neutral, and compound scores.
+
+
+*The compound score represents the overall sentiment of the review. If it is greater than or equal to 0.05, the review is considered positive and is appended to the pos list. If it is less than 
 
 or equal to -0.05, the review is considered negative and is appended to the neg list. Otherwise, the review is considered neutral.
 
 The corresponding sentiment label ('Positive', 'Negative', or 'Neutral') is returned.
+
 4.The code prompts the user to enter a review:
+
 >>code
+
 review = input("Enter your review: ")
+
 *This line prompts the user to enter a review, which will be used for sentiment analysis.
+
 5.The code initializes two empty lists, pos and neg, to store positive and negative feedback:
+
 >>code
+
 pos, neg = [], []
+
 *These lists will be populated with reviews that are classified as positive or negative.
+
 6.The code analyzes the sentiment of the review using the get_sentiment() function:
+
 >>code
+
 sentiment = get_sentiment(review)
+
 *The get_sentiment() function is called with the user-provided review, and the resulting sentiment label ('Positive', 'Negative', or 'Neutral') is stored in the sentiment variable.
+
 7.The code prints the positive and negative feedback based on the sentiment score:
+
 >>code
+
 print('Positive feedback:', pos)
+
 print('Negative feedback:', neg)
+
 *These lines print the reviews that have been classified as positive and negative, respectively, based on the sentiment analysis.
