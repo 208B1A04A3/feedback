@@ -1,0 +1,126 @@
+{
+  "nbformat": 4,
+  "nbformat_minor": 0,
+  "metadata": {
+    "colab": {
+      "provenance": [],
+      "authorship_tag": "ABX9TyMRxNeBTORAI8JL7NL809F2",
+      "include_colab_link": true
+    },
+    "kernelspec": {
+      "name": "python3",
+      "display_name": "Python 3"
+    },
+    "language_info": {
+      "name": "python"
+    }
+  },
+  "cells": [
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "view-in-github",
+        "colab_type": "text"
+      },
+      "source": [
+        "<a href=\"https://colab.research.google.com/github/208B1A04A3/feedback/blob/main/Fraud%20detection.csv\" target=\"_parent\"><img src=\"https://colab.research.google.com/assets/colab-badge.svg\" alt=\"Open In Colab\"/></a>"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": 42,
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "fmn_VAflfy7y",
+        "outputId": "624ff900-c6f8-4fd9-d577-29ec9df886e1"
+      },
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "Accuracy: 1.00\n",
+            "Confusion Matrix:\n",
+            "[[16688     0]\n",
+            " [    0    24]]\n",
+            "Classification Report:\n",
+            "              precision    recall  f1-score   support\n",
+            "\n",
+            "         0.0       1.00      1.00      1.00     16688\n",
+            "         1.0       1.00      1.00      1.00        24\n",
+            "\n",
+            "    accuracy                           1.00     16712\n",
+            "   macro avg       1.00      1.00      1.00     16712\n",
+            "weighted avg       1.00      1.00      1.00     16712\n",
+            "\n",
+            "Feature Importances:\n",
+            "step: 0.0065\n",
+            "type: 0.0019\n",
+            "amount: 0.0222\n",
+            "oldbalanceOrg: 0.0135\n",
+            "newbalanceOrig: 0.0019\n",
+            "oldbalanceDest: 0.0082\n",
+            "newbalanceDest: 0.0051\n",
+            "isFraud: 0.9407\n",
+            "isFlaggedFraud: 0.0000\n"
+          ]
+        }
+      ],
+      "source": [
+        "import pandas as pd\n",
+        "from sklearn.model_selection import train_test_split\n",
+        "from sklearn.ensemble import RandomForestClassifier\n",
+        "from sklearn.preprocessing import LabelEncoder\n",
+        "from sklearn.metrics import accuracy_score, classification_report, confusion_matrix\n",
+        "\n",
+        "# Load the dataset\n",
+        "data = pd.read_csv('/content/Fraud.csv')\n",
+        "\n",
+        "# Drop any rows with missing values\n",
+        "data.dropna(inplace=True)\n",
+        "\n",
+        "# Encode categorical variables\n",
+        "label_encoders = {}\n",
+        "categorical_columns = ['type']\n",
+        "for column in categorical_columns:\n",
+        "    label_encoders[column] = LabelEncoder()\n",
+        "    data[column] = label_encoders[column].fit_transform(data[column])\n",
+        "\n",
+        "# Select features and target variable\n",
+        "selected_features = ['step', 'type', 'amount', 'oldbalanceOrg', 'newbalanceOrig', 'oldbalanceDest', 'newbalanceDest','isFraud', 'isFlaggedFraud']\n",
+        "X = data[selected_features]\n",
+        "y = data['isFraud']\n",
+        "\n",
+        "# Split the data into training and testing sets\n",
+        "X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)\n",
+        "\n",
+        "# Create and train a Random Forest classifier\n",
+        "model = RandomForestClassifier(random_state=42)\n",
+        "model.fit(X_train, y_train)\n",
+        "\n",
+        "# Make predictions on the test set\n",
+        "y_pred = model.predict(X_test)\n",
+        "\n",
+        "# Evaluate the model\n",
+        "accuracy = accuracy_score(y_test, y_pred)\n",
+        "conf_matrix = confusion_matrix(y_test, y_pred)\n",
+        "classification_rep = classification_report(y_test, y_pred)\n",
+        "\n",
+        "# Print the evaluation metrics\n",
+        "print(f'Accuracy: {accuracy:.2f}')\n",
+        "print('Confusion Matrix:')\n",
+        "print(conf_matrix)\n",
+        "print('Classification Report:')\n",
+        "print(classification_rep)\n",
+        "\n",
+        "# Feature importances\n",
+        "feature_importances = model.feature_importances_\n",
+        "print('Feature Importances:')\n",
+        "for feature, importance in zip(selected_features, feature_importances):\n",
+        "    print(f'{feature}: {importance:.4f}')\n"
+      ]
+    }
+  ]
+}
